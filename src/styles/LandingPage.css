@@ -1,0 +1,163 @@
+/* LandingPage.css */
+
+.landing-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(circle at top right, #0f172a, #022c22);
+    color: white;
+}
+
+.landing-header {
+    padding: 6rem 2rem;
+    text-align: center;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.logo-icon {
+    background: var(--color-primary);
+    padding: 0.75rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 20px rgba(5, 150, 105, 0.4);
+}
+
+.landing-header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    background: linear-gradient(to right, white, #a7f3d0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.portal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 3rem;
+    padding: 3rem;
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    flex: 1;
+}
+
+.portal-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.portal-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-primary);
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.3);
+}
+
+.icon-wrapper {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+    color: var(--color-primary-light);
+}
+
+.portal-card:hover .icon-wrapper {
+    transform: scale(1.1);
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Card Specific Theme Accents on Hover */
+.portal-card.citizen:hover .icon-wrapper {
+    background: #3b82f6;
+    /* Blue */
+}
+
+.portal-card.staff:hover .icon-wrapper {
+    background: #eab308;
+    /* Yellow */
+}
+
+.portal-card.supervisor:hover .icon-wrapper {
+    background: #8b5cf6;
+    /* Purple */
+}
+
+.portal-card.admin:hover .icon-wrapper {
+    background: #ef4444;
+    /* Red */
+}
+
+
+.portal-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.portal-card p {
+    color: #cad4e0;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.btn-text {
+    margin-top: auto;
+    font-weight: 600;
+    color: var(--color-primary-light);
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.portal-card:hover .btn-text {
+    opacity: 1;
+    color: white;
+}
+
+.landing-footer {
+    text-align: center;
+    padding: 2rem;
+    color: #475569;
+    font-size: 0.875rem;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,23 @@
+@keyframes pulse-gold {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
+    }
+}
+
+.marker-glow-gold div {
+    animation: pulse-gold 2s infinite ease-in-out;
+}
+
+/* Custom Marker Icon Base */
+.custom-marker-icon {
+    background: transparent;
+    border: none;
+}

@@ -1,0 +1,67 @@
+:root {
+  /* Colors - Emerald & Slate Theme */
+  --color-primary: #059669; /* Emerald 600 */
+  --color-primary-dark: #047857; /* Emerald 700 */
+  --color-primary-light: #34d399; /* Emerald 400 */
+  
+  --color-secondary: #0f172a; /* Slate 900 */
+  --color-secondary-light: #334155; /* Slate 700 */
+
+  --color-accent: #d97706; /* Amber 600 */
+  
+  --color-bg-body: #f8fafc; /* Slate 50 */
+  --color-bg-card: #ffffff;
+  --color-bg-input: #f1f5f9; /* Slate 100 */
+  
+  --color-text-main: #0f172a; /* Slate 900 */
+  --color-text-muted: #64748b; /* Slate 500 */
+  --color-text-inverted: #ffffff;
+  
+  --color-border: #e2e8f0; /* Slate 200 */
+  --color-border-hover: #cbd5e1; /* Slate 300 */
+  
+  /* Status Colors */
+  --status-reported: #3b82f6; /* Blue 500 */
+  --status-verified: #8b5cf6; /* Violet 500 */
+  --status-assigned: #eab308; /* Yellow 500 */
+  --status-in-progress: #f97316; /* Orange 500 */
+  --status-resolved: #22c55e; /* Green 500 */
+  --status-closed: #64748b; /* Slate 500 */
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
+  
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Mode Tokens (Optional foundation) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* --color-bg-body: #0f172a; */
+    /* Keeps light mode for now as per MVP simplicity unless requested, 
+       but keeping strict separation for future switch */
+  }
+}
