@@ -1,163 +1,226 @@
 /* LandingPage.css */
 
 .landing-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: radial-gradient(circle at top right, #0f172a, #022c22);
-    color: white;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: radial-gradient(circle at top right, var(--color-bg-body), var(--color-secondary));
+	color: var(--color-text-main);
 }
 
 .landing-header {
-    padding: 6rem 2rem;
-    text-align: center;
-    animation: fadeInDown 0.8s ease-out;
+	padding: 6rem 2rem;
+	text-align: center;
+	/* animation: fadeInDown 0.8s ease-out;  <-- Handled by GSAP now */
 }
 
 .logo-area {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	margin-bottom: 1rem;
 }
 
 .logo-icon {
-    background: var(--color-primary);
-    padding: 0.75rem;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 0 20px rgba(5, 150, 105, 0.4);
+	background: var(--color-primary);
+	padding: 0.75rem;
+	border-radius: var(--radius-lg);
+	box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+	/* Emerald glow */
 }
 
 .landing-header h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    background: linear-gradient(to right, white, #a7f3d0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+	font-size: 3rem;
+	font-weight: 800;
+	letter-spacing: -0.05em;
+	background: linear-gradient(to right, #F1F5F9, #34D399);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-    font-size: 1.25rem;
-    color: #94a3b8;
-    max-width: 600px;
-    margin: 0 auto;
+	font-size: 1.25rem;
+	color: var(--color-text-muted);
+	max-width: 600px;
+	margin: 0 auto;
 }
 
 .portal-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 3rem;
-    padding: 3rem;
-    max-width: 1600px;
-    width: 100%;
-    margin: 0 auto;
-    flex: 1;
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	gap: 2rem;
+	padding: 2rem;
+	max-width: 1600px;
+	width: 100%;
+	margin: 0 auto;
+	flex: 1;
 }
 
-.portal-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    text-decoration: none;
-    color: white;
-    position: relative;
-    overflow: hidden;
+@media (min-width: 768px) {
+	.portal-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }
 
-.portal-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--color-primary);
-    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.3);
+@media (min-width: 1280px) {
+	.portal-grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
 }
 
-.icon-wrapper {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1.5rem;
-    border-radius: 50%;
-    margin-bottom: 1.5rem;
-    transition: transform 0.3s ease;
-    color: var(--color-primary-light);
+/* --- Flip Card Logic --- */
+.flip-card-container {
+	background-color: transparent;
+	perspective: 1000px;
+	aspect-ratio: 1 / 1;
+	cursor: pointer;
 }
 
-.portal-card:hover .icon-wrapper {
-    transform: scale(1.1);
-    background: var(--color-primary);
-    color: white;
+.flip-card-inner {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+	transform-style: preserve-3d;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	border-radius: var(--radius-lg);
 }
 
-/* Card Specific Theme Accents on Hover */
-.portal-card.citizen:hover .icon-wrapper {
-    background: #3b82f6;
-    /* Blue */
+.flip-card-container:hover .flip-card-inner {
+	transform: rotateY(180deg);
 }
 
-.portal-card.staff:hover .icon-wrapper {
-    background: #eab308;
-    /* Yellow */
+.portal-card-face {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	border-radius: var(--radius-lg);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 3.5rem;
+	/* Preserved the requested large padding */
+	border: 1px solid var(--color-border);
 }
 
-.portal-card.supervisor:hover .icon-wrapper {
-    background: #8b5cf6;
-    /* Purple */
+/* Front Face (Original Look) */
+.portal-card-front {
+	background: var(--color-bg-card);
+	/* Base Color */
 }
 
-.portal-card.admin:hover .icon-wrapper {
-    background: #ef4444;
-    /* Red */
+/* Hover Effect on FRONT face only happens via container hover implicitly, 
+   but since it rotates away, we mainly care about the initial look. 
+   Optionally, we can add the gradient here if we want it constant or on front only. */
+.portal-card-front {
+	/* Using the gradient we made earlier */
+	background: linear-gradient(145deg, var(--color-bg-card), var(--color-bg-input));
 }
 
-
-.portal-card h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+.flip-card-container:hover .portal-card-front {
+	/* Mimic the old hover effect on the front before it flips fully? 
+       Actually, standard flip doesn't need 'hover' styles on front, it just flips. 
+       We'll keep the icon glow on the front face constant or triggered by container hover. */
+	border-color: var(--color-primary);
+	box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
 }
 
-.portal-card p {
-    color: #cad4e0;
-    margin-bottom: 2rem;
-    line-height: 1.6;
+/* Back Face */
+.portal-card-back {
+	background: var(--color-bg-body);
+	transform: rotateY(180deg);
+	border-color: var(--color-primary);
+	/* Always lit up on back */
+	box-shadow: inset 0 0 30px rgba(16, 185, 129, 0.1);
+}
+
+.portal-card-back h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin-bottom: 1.5rem;
+	color: var(--color-primary);
+}
+
+/* Link Stack Styles */
+.link-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	width: 100%;
+}
+
+.flip-link {
+	display: block;
+	width: 100%;
+	padding: 0.75rem;
+	background: var(--color-bg-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	color: var(--color-text-main);
+	font-size: 0.9rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: all 0.2s ease;
+}
+
+.flip-link:hover {
+	background: var(--color-primary);
+	border-color: var(--color-primary);
+	color: white;
+	transform: translateX(5px);
+}
+
+/* Text & Icon Styles (Adapted for Flip) */
+.portal-card-front h2 {
+	margin-top: 1.5rem;
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: var(--color-text-main);
+	transition: color 0.3s ease;
+}
+
+.flip-card-container:hover h2 {
+	color: var(--color-primary);
+}
+
+.portal-card-front p {
+	color: #cad4e0;
+	font-size: 0.9rem;
+	margin-top: 0.5rem;
+	margin-bottom: 2rem;
+	line-height: 1.6;
 }
 
 .btn-text {
-    margin-top: auto;
-    font-weight: 600;
-    color: var(--color-primary-light);
-    opacity: 0.8;
-    transition: opacity 0.2s;
-}
-
-.portal-card:hover .btn-text {
-    opacity: 1;
-    color: white;
+	margin-top: auto;
+	font-size: 0.75rem;
+	opacity: 0.6;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--color-text-muted);
 }
 
 .landing-footer {
-    text-align: center;
-    padding: 2rem;
-    color: #475569;
-    font-size: 0.875rem;
+	text-align: center;
+	padding: 2rem;
+	color: var(--color-text-muted);
+	font-size: 0.875rem;
 }
 
 @keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
