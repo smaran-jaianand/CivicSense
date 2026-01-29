@@ -551,3 +551,37 @@ label {
 .min-h-350 {
   min-height: 350px;
 }
+
+/* Print Styling */
+@media print {
+  /* Hide interactive elements */
+  .portal-nav,
+  button,
+  .btn,
+  .no-print,
+  .page-header button,
+  .page-header .btn {
+    display: none !important;
+  }
+
+  /* Reset layout for print */
+  .portal-layout {
+    display: block;
+  }
+  
+  .portal-content {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+  
+  /* Ensure charts and tables break nicely */
+  .break-inside-avoid {
+    break-inside: avoid;
+  }
+}

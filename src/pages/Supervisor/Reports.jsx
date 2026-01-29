@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { db } from '../../services/db';
-import { BarChart3, PieChart, TrendingUp } from 'lucide-react';
+import { BarChart3, PieChart, TrendingUp, FileSpreadsheet, Printer } from 'lucide-react';
 
 const Reports = () => {
     const issues = db.getAllIssues();
@@ -45,9 +45,58 @@ const Reports = () => {
                     <h1 className="page-title">Operational Reports</h1>
                     <p className="page-subtitle">System-wide performance analytics and category breakdown.</p>
                 </div>
-                <button className="btn btn-primary" onClick={() => window.print()}>
-                    Export / Print
-                </button>
+                <div className="flex gap-2 no-print">
+                    <button className="btn btn-secondary" onClick={() => window.print()}>
+                        <Printer size={16} />
+                        Print View
+                    </button>
+                    <button className="btn btn-primary" onClick={() => {
+                        const issues = db.getAllIssues();
+                        const headers = ["ID", "Title", "Type", "Priority", "Status", "Department", "Location", "Created At", "Updated At", "Description"];
+
+                        // Robust CSV generation with BOM for Excel
+                        const csvRows = [
+                            headers.join(","),
+                            ...issues.map(issue => {
+                                // Helper to safely escape CSV fields
+                                const safe = (str) => {
+                                    if (!str) return '""';
+                                    const escaped = String(str).replace(/"/g, '""'); // Escape double quotes
+                                    // Wrap in quotes if contains comma, quote, or newline
+                                    return `"${escaped}"`;
+                                };
+
+                                return [
+                                    safe(issue.id),
+                                    safe(issue.title),
+                                    safe(issue.type),
+                                    safe(issue.priority),
+                                    safe(issue.status),
+                                    safe(issue.department),
+                                    safe(issue.location),
+                                    safe(new Date(issue.createdAt).toLocaleString()),
+                                    safe(new Date(issue.updatedAt).toLocaleString()),
+                                    safe(issue.description)
+                                ].join(",");
+                            })
+                        ];
+
+                        const csvContent = csvRows.join("\n");
+                        // Add BOM (\ufeff) so Excel recognizes it as UTF-8
+                        const blob = new Blob(["\ufeff" + csvContent], { type: 'text/csv;charset=utf-8;' });
+                        const link = document.createElement("a");
+                        const url = URL.createObjectURL(blob);
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", `civic_pulse_report_${new Date().toISOString().slice(0, 10)}.csv`);
+                        link.style.visibility = 'hidden';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }}>
+                        <FileSpreadsheet size={16} />
+                        Export to Excel
+                    </button>
+                </div>
             </header>
 
             {/* KPI Cards */}
@@ -124,6 +173,61 @@ const Reports = () => {
                                             }`}>
                                             {count > 5 ? 'HEAVY' : 'NORMAL'}
                                         </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <br />
+
+            {/* Detailed Issues List for Print/View */}
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-[var(--color-border)] mt-8">
+                <div className="flex items-center gap-2 mb-6">
+                    <h3 className="font-bold text-lg">Detailed Issues Log</h3>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left">
+                        <thead className="text-xs text-gray-500 uppercase bg-gray-50">
+                            <tr>
+                                <th className="px-4 py-3">ID</th>
+                                <th className="px-4 py-3">Status</th>
+                                <th className="px-4 py-3">Priority</th>
+                                <th className="px-4 py-3">Type</th>
+                                <th className="px-4 py-3">Department</th>
+                                <th className="px-4 py-3">Location</th>
+                                <th className="px-4 py-3">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {issues.map(issue => (
+                                <tr key={issue.id} className="border-b border-gray-100 hover:bg-gray-50 break-inside-avoid">
+                                    <td className="px-4 py-3 font-mono text-xs">{issue.id}</td>
+                                    <td className="px-4 py-3">
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize 
+                                            ${issue.status === 'resolved' ? 'bg-green-100 text-green-700' :
+                                                issue.status === 'closed' ? 'bg-gray-100 text-gray-700' :
+                                                    issue.status === 'reported' ? 'bg-blue-100 text-blue-700' :
+                                                        'bg-yellow-100 text-yellow-700'}`}>
+                                            {issue.status.replace('_', ' ')}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-3">
+                                        <span className={`font-medium ${issue.priority === 'Critical' ? 'text-red-600' :
+                                            issue.priority === 'High' ? 'text-orange-600' :
+                                                issue.priority === 'Medium' ? 'text-blue-600' :
+                                                    'text-gray-600'
+                                            }`}>
+                                            {issue.priority}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-3">{issue.type}</td>
+                                    <td className="px-4 py-3">{issue.department}</td>
+                                    <td className="px-4 py-3 text-gray-500 truncate max-w-[200px]">{issue.location}</td>
+                                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
+                                        {new Date(issue.createdAt).toLocaleDateString()}
                                     </td>
                                 </tr>
                             ))}
