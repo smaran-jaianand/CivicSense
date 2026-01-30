@@ -19,6 +19,7 @@ const TaskDetail = () => {
 	const navigate = useNavigate();
 	const [task, setTask] = useState(null);
 	const [resolutionProof, setResolutionProof] = useState(null); // Proof State
+	const [actionMessage, setActionMessage] = useState(''); // Feedback message
 
 	useEffect(() => {
 		const foundTask = db.getIssueById(id);
@@ -27,11 +28,25 @@ const TaskDetail = () => {
 
 	if (!task) return <div className="p-8 text-center">Loading or Task Not Found...</div>;
 
-	const handleStatusUpdate = (newStatus) => {
-		const updates = { status: newStatus };
+	// Consolidated Action Handler
+	const handleAction = (action) => {
+		setActionMessage('');
+
+		if (action === 'toggle_hold') {
+			const result = db.toggleTaskHold(task.id, 'Staff Officer');
+			if (result.success) {
+				setActionMessage(result.message || `Task ${result.status === 'on_hold' ? 'put on hold' : 'resumed'}`);
+				setTask(db.getIssueById(task.id)); // Refresh
+			} else {
+				alert(result.message);
+			}
+			return;
+		}
+
+		const updates = { status: action };
 
 		// Attach proof if resolving
-		if (newStatus === 'resolved' && resolutionProof) {
+		if (action === 'resolved' && resolutionProof) {
 			updates.resolutionProof = {
 				url: resolutionProof,
 				type: 'image',
@@ -62,7 +77,20 @@ const TaskDetail = () => {
 					<div className="bg-white p-6 rounded-lg shadow-sm border border-[var(--color-border)]">
 						<div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
 							<div>
-								<span className="badge bg-gray-100 text-gray-600 mb-2 block w-max">{task.department}</span>
+								<div className="flex items-center gap-2 mb-2">
+									<span className="badge bg-gray-100 text-gray-600 mb-0 block w-max">{task.department}</span>
+									{task.assignedTo && (
+										<span className="badge bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1">
+											<span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+											Officer: {task.assignedTo.name}
+										</span>
+									)}
+									{task.status === 'on_hold' && task.lastAssignedTo && (
+										<span className="badge bg-yellow-100 text-yellow-800 border border-yellow-200">
+											Last: {task.lastAssignedTo.name}
+										</span>
+									)}
+								</div>
 								<h1 className="text-2xl font-bold mb-2">{task.type}</h1>
 								<div className="flex items-center gap-2 text-muted text-sm">
 									<MapPin size={16} /> {task.location}
@@ -153,14 +181,20 @@ const TaskDetail = () => {
 					<div className="bg-white p-6 rounded-lg shadow-md border border-[var(--color-border)] sticky top-24">
 						<h3 className="font-semibold text-gray-900 mb-4">Actions</h3>
 						<div className="space-y-6">
+							{actionMessage && (
+								<div className="p-3 bg-blue-50 text-blue-700 text-sm rounded border border-blue-100 animate-in fade-in">
+									{actionMessage}
+								</div>
+							)}
+
 							{task.status === 'reported' && (
-								<button onClick={() => handleStatusUpdate('assigned')} className="btn btn-primary w-full justify-start">
+								<button onClick={() => handleAction('assigned')} className="btn btn-primary w-full justify-start">
 									<CheckCircle size={18} /> Acknowledge & Assign
 								</button>
 							)}
 
 							{(task.status === 'assigned' || task.status === 'reported') && (
-								<button onClick={() => handleStatusUpdate('in_progress')} className="btn btn-primary w-full justify-start bg-orange-600 hover:bg-orange-700">
+								<button onClick={() => handleAction('in_progress')} className="btn btn-primary w-full justify-start bg-orange-600 hover:bg-orange-700">
 									<Clock size={18} /> Start Work
 								</button>
 							)}
@@ -198,7 +232,7 @@ const TaskDetail = () => {
 									)}
 
 									<button
-										onClick={() => handleStatusUpdate('resolved')}
+										onClick={() => handleAction('resolved')}
 										className="btn btn-primary w-full justify-start bg-green-600 hover:bg-green-700"
 										disabled={!resolutionProof} // Enforce proof requirement
 									>
@@ -207,10 +241,14 @@ const TaskDetail = () => {
 									{!resolutionProof && <p className="text-[10px] text-green-600/70 text-center">* Proof required to resolve</p>}
 								</div>
 							)}
-							{/* Hide 'On Hold' if the task is already resolved/closed */}
-							{!['resolved', 'closed'].includes(task.status) && (
-								<button onClick={() => handleStatusUpdate('on_hold')} className="btn btn-secondary w-full justify-start">
-									<AlertTriangle size={18} /> Put On Hold
+							{/* Hold / Resume Logic */}
+							{!['resolved', 'closed'].includes(task.status) && task.status !== 'reported' && (
+								<button
+									onClick={() => handleAction('toggle_hold')}
+									className={`btn w-full justify-start ${task.status === 'on_hold' ? 'btn-primary bg-emerald-600 hover:bg-emerald-700' : 'btn-secondary'}`}
+								>
+									{task.status === 'on_hold' ? <Play size={18} /> : <AlertTriangle size={18} />}
+									{task.status === 'on_hold' ? 'Resume Work' : 'Put On Hold'}
 								</button>
 							)}
 						</div>

@@ -20,9 +20,14 @@ const MyReports = () => {
 								<h3 className="text-lg font-semibold">{issue.type}</h3>
 							</div>
 							<p className="text-muted mb-2">{issue.description}</p>
-							<div className="text-sm text-gray-500 flex gap-4">
+							<div className="text-sm text-gray-500 flex flex-wrap gap-4 items-center">
 								<span>📍 {issue.location}</span>
 								<span>📅 {new Date(issue.createdAt).toLocaleDateString()}</span>
+								{issue.assignedTo && (
+									<span className="text-blue-600 font-medium text-xs bg-blue-50 px-2 py-1 rounded-full border border-blue-100">
+										👮‍♂️ Officer {issue.assignedTo.name}
+									</span>
+								)}
 							</div>
 						</div>
 

@@ -250,6 +250,109 @@ export const db = {
     window.location.reload();
   },
 
+
+
+  // Assignment Logic Helpers
+  getAvailablePersonnel: (department) => {
+    const all = db.getAllPersonnel();
+    // Filter by department and status 'Available'
+    // Tier 1 is general, Tier 2 is specialist. For auto-assign, we usually prefer Tier 1 unless specified.
+    // For now, we'll just grab anyone available in the department.
+    return all.filter(p => p.department === department && p.status === 'Available');
+  },
+
+  getRandomAvailablePersonnel: (department) => {
+    const available = db.getAvailablePersonnel(department);
+    if (available.length === 0) return null;
+    const randomIndex = Math.floor(Math.random() * available.length);
+    return available[randomIndex];
+  },
+
+  assignIssue: (issueId, personnelId, authorizedUser = 'System') => {
+    const person = db.getAllPersonnel().find(p => p.id === personnelId);
+    if (!person) return { success: false, message: 'Personnel not found' };
+
+    if (person.status !== 'Available') {
+      // Logic to override if needed, but for auto-assign we generally skip.
+      // However, if manual assign, we might force.
+    }
+
+    // 1. Update Person -> Busy
+    db.updatePersonnel(person.id, { status: 'Busy' });
+
+    // 2. Update Issue
+    db.updateIssue(issueId, {
+      status: 'assigned',
+      assignedTo: { id: person.id, name: person.name },
+      department: person.department // Ensure dept matches if not already
+    }, authorizedUser);
+
+    return { success: true, personnel: person };
+  },
+
+  toggleTaskHold: (issueId, authorizedUser = 'System') => {
+    const issue = db.getIssueById(issueId);
+    if (!issue) return { success: false, message: 'Issue not found' };
+
+    if (issue.status === 'on_hold') {
+      // RESUME LOGIC
+      return db.resumeTask(issueId, authorizedUser);
+    } else {
+      // HOLD LOGIC
+      return db.holdTask(issueId, authorizedUser);
+    }
+  },
+
+  holdTask: (issueId, authorizedUser) => {
+    const issue = db.getIssueById(issueId);
+    const currentAssignee = issue.assignedTo;
+
+    if (currentAssignee) {
+      // Free the person
+      db.updatePersonnel(currentAssignee.id, { status: 'Available' });
+    }
+
+    db.updateIssue(issueId, {
+      status: 'on_hold',
+      assignedTo: null, // Clear active assignment
+      lastAssignedTo: currentAssignee // Remember who had it
+    }, authorizedUser);
+
+    return { success: true, status: 'on_hold', message: 'Task put on hold. Personnel freed.' };
+  },
+
+  resumeTask: (issueId, authorizedUser) => {
+    const issue = db.getIssueById(issueId);
+    const lastAssignee = issue.lastAssignedTo;
+
+    let targetPerson = null;
+
+    // 1. Try to re-assign to last person
+    if (lastAssignee) {
+      const person = db.getAllPersonnel().find(p => p.id === lastAssignee.id);
+      if (person && person.status === 'Available') {
+        targetPerson = person;
+      }
+    }
+
+    // 2. If not available, pick random
+    if (!targetPerson) {
+      targetPerson = db.getRandomAvailablePersonnel(issue.department);
+    }
+
+    if (!targetPerson) {
+      return { success: false, message: 'No personnel available to resume task.' };
+    }
+
+    // 3. Assign
+    db.assignIssue(issueId, targetPerson.id, authorizedUser);
+
+    // Update status to in_progress directly if it was resumed (usually implies work continues)
+    db.updateIssue(issueId, { status: 'in_progress' }, authorizedUser);
+
+    return { success: true, status: 'in_progress', assignedTo: targetPerson.name };
+  },
+
   CONSTANTS: {
     DEPARTMENTS,
     ISSUE_TYPES

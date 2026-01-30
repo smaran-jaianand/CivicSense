@@ -146,6 +146,11 @@ const SupervisorDashboard = () => {
 									<div className="text-sm text-muted">
 										{issue.department} • {issue.location} • <span className="text-red-600 font-medium">{Math.floor((Date.now() - new Date(issue.createdAt)) / 3600000)} hours old</span>
 									</div>
+									{issue.assignedTo && (
+										<div className="text-xs text-blue-600 mt-1">
+											Assigned: <strong>{issue.assignedTo.name}</strong>
+										</div>
+									)}
 								</div>
 								<Link to={`/staff/task/${issue.id}`} className="btn btn-secondary text-xs">
 									Review
