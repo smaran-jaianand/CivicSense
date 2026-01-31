@@ -21,11 +21,11 @@ const AdminDashboard = () => {
 			<h1 className="page-title">System Configuration</h1>
 			<div className="bg-white p-6 rounded-lg shadow-sm border border-[var(--color-border)]">
 				<h3 className="font-bold mb-4">Issue Categories</h3>
-				<div className="flex gap-2 flex-wrap">
+				<div className="flex gap-4 flex-wrap">
 					{db.CONSTANTS.ISSUE_TYPES.map(t => (
-						<span key={t} className="px-3 py-1 bg-gray-100 rounded-full text-sm">{t}</span>
+						<span key={t} style={{ padding: '5px' }} className="px-4 py-2 bg-gray-100 rounded-full text-sm">{t}</span>
 					))}
-					<button className="px-3 py-1 border border-dashed border-gray-400 text-gray-500 rounded-full text-sm hover:bg-gray-50">+ Add New</button>
+					<button className="px-4 py-2 border border-dashed border-gray-400 text-gray-500 rounded-full text-sm hover:bg-gray-50">+ Add New</button>
 				</div>
 			</div>
 			<br />
@@ -38,10 +38,10 @@ const AdminDashboard = () => {
 			<div className="mt-8">
 				<h3 className="text-red-600 font-bold mb-3 uppercase text-sm tracking-wider">Danger Zone</h3>
 				<br />
-				<div className="bg-red-50 p-6 rounded-lg border border-red-200 flex justify-between items-center">
+				<div className="bg-black-50 p-6 rounded-lg border border-red-200 flex justify-between items-center">
 					<div>
-						<h4 className="font-bold text-red-900">Reset System Data</h4>
-						<p className="text-sm text-red-700 mt-1">This will permanently delete all issues, user modifications, and history. The generic seed data will be restored on reload.</p>
+						<h4 className="font-bold text-black-900">Reset System Data</h4>
+						<p className="text-sm text-black-700 mt-1">This will permanently delete all issues, user modifications, and history. The generic seed data will be restored on reload.</p>
 					</div>
 					<button
 						onClick={() => {
