@@ -143,7 +143,7 @@ const ReportSuccess = () => {
 				</div>
 			</div>
 
-			<p className="mt-6 text-gray-400 text-[10px] opacity-70">CivicPulse &copy; 2026</p>
+			<p className="mt-6 text-gray-400 text-[10px] opacity-70">SymbiConnect &copy; 2026</p>
 		</div>
 	);
 };

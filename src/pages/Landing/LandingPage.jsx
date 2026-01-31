@@ -43,7 +43,7 @@ const LandingPage = () => {
 					<div className="logo-icon">
 						<ShieldCheck size={32} color="white" />
 					</div>
-					<h1>CivicPulse</h1>
+					<h1>SymbiConnect</h1>
 				</div>
 				<p className="subtitle">Operational Management System for Modern Civic Administration</p>
 			</header>
@@ -137,7 +137,7 @@ const LandingPage = () => {
 			</main>
 
 			<footer className="landing-footer">
-				<p>&copy; 2026 CivicPulse System. Development Build.</p>
+				<p>&copy; 2026 SymbiConnect System. Development Build.</p>
 			</footer>
 		</div>
 	);

@@ -113,7 +113,3 @@ The application will automatically seed the LocalStorage "database" with sample 
 - When ready, clicking **Resume** attempts to re-assign the original staff member. If they are busy, a new available staff member is selected automatically.
 
 ---
-
-## 📄 License
-
-Distributed under the MIT License.

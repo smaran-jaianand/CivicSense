@@ -28,7 +28,7 @@ const MOCK_POSTS = [
 	},
 	{
 		id: 3,
-		author: "CivicWatcher",
+		author: "SymbiWatcher",
 		avatar: "CW",
 		time: "1 day ago",
 		title: "Proposal: Weekend Pedestrian Zone on Market Street",
@@ -107,7 +107,7 @@ const CitizenForum = () => {
 										<span className="text-xs text-gray-400">• {post.time}</span>
 										{post.tag && (
 											<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ml-auto ${post.type === 'positive' ? 'bg-green-100 text-green-700' :
-													post.type === 'negative' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+												post.type === 'negative' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
 												}`}>
 												{post.tag}
 											</span>
@@ -147,7 +147,7 @@ const CitizenForum = () => {
 							<MoreHorizontal size={16} className="text-gray-400" />
 						</div>
 						<p className="text-xs text-gray-500 leading-relaxed mb-4">
-							Welcome to the CivicPulse Community Forum. Use this space to discuss local matters, propose ideas, and organize community events.
+							Welcome to the SymbiConnect Community Forum. Use this space to discuss local matters, propose ideas, and organize community events.
 						</p>
 						<div className="flex items-center gap-4 text-sm font-bold border-t pt-4">
 							<div className="flex flex-col">

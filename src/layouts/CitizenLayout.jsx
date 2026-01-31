@@ -9,7 +9,7 @@ const CitizenLayout = () => {
 			<nav className="portal-nav">
 				<Link to="/" className="portal-brand">
 					<ShieldCheck size={24} />
-					<span>CivicPulse Connect</span>
+					<span>SymbiConnect</span>
 				</Link>
 
 				<div className="nav-links">

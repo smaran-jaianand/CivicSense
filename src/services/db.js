@@ -1,5 +1,5 @@
 /**
- * CivicPulse Local Storage Database Service
+ * SymbiConnect Local Storage Database Service
  * Emulates a backend with persistent local storage.
  */
 
