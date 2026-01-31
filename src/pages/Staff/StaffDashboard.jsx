@@ -66,10 +66,10 @@ const StaffDashboard = () => {
 						<span className="text-xl">🗺️</span> View Map
 					</Link>
 					<br />
-					<div className="flex items-center gap-2 w-full sm:w-auto bg-gray-50 p-1 rounded-lg border border-gray-200">
-						<span className="text-sm font-medium text-muted pl-2">Department:</span>
+					<div className="flex items-center gap-2 w-full sm:w-auto bg-white p-2 rounded-xl border border-gray-200 shadow-sm hover:border-blue-400 transition-colors">
+						<span className="text-sm font-bold text-gray-700 pl-2">Filter:</span>
 						<select
-							className="input py-1 px-3 text-sm w-full sm:w-auto border-none bg-transparent focus:ring-0"
+							className="input py-2 px-4 text-sm w-full sm:w-auto border-none bg-transparent focus:ring-0 font-medium text-gray-800"
 							value={deptFilter}
 							onChange={(e) => {
 								setDeptFilter(e.target.value);

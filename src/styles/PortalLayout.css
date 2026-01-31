@@ -8,17 +8,34 @@
 }
 
 .portal-nav {
-	background-color: var(--color-bg-card);
-	border-bottom: 1px solid var(--color-border);
+	/* Floating Island Style */
+	position: fixed;
+	top: var(--space-4);
+	left: 50%;
+	transform: translateX(-50%);
+	width: 95%;
+	max-width: 1400px;
+	height: 72px;
+
+	/* Glassmorphism */
+	background-color: rgba(30, 41, 59, 0.85);
+	/* Slate 800 with opacity */
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+
+	/* Shape & Shadow */
+	border-radius: var(--radius-lg);
+	/* or var(--radius-full) for pill */
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+	/* Layout */
 	padding: 0 var(--space-6);
-	height: 64px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	box-shadow: var(--shadow-sm);
-	position: sticky;
-	top: 0;
-	z-index: 10;
+	z-index: 100;
+	transition: all var(--transition-normal);
 }
 
 .portal-brand {
@@ -60,7 +77,8 @@
 	max-width: 1600px;
 	width: 95%;
 	margin: 0 auto;
-	padding-top: var(--space-8);
+	/* Push content down to account for floating nav (72px height + space) */
+	padding-top: calc(72px + var(--space-8));
 	padding-bottom: var(--space-12);
 }
 

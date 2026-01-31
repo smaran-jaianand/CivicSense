@@ -5,6 +5,7 @@ import { ArrowLeft, MapPin, CheckCircle, Clock, AlertTriangle, Play, Image as Im
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import AudioPlayer from '../../components/AudioPlayer';
 
 // Fix Icons
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -111,14 +112,17 @@ const TaskDetail = () => {
 						<div className="mt-6 border-t pt-4">
 							<h3 className="text-sm font-semibold text-gray-900 mb-4">Evidence & Attachments</h3>
 
+
+
+							// ... (in imports)
+
+							// ... (inside TaskDetail render)
+
 							{/* Audio */}
 							{task.attachments?.filter(a => a.type === 'audio').map((audio, idx) => (
-								<div key={idx} className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg w-full max-w-md mb-3 border border-gray-200">
-									<div className="bg-blue-100 p-2 rounded-full text-blue-600"><Play size={14} /></div>
-									<div className="flex-1">
-										<div className="text-xs font-semibold text-gray-700 mb-1">{audio.name || 'Voice Note'}</div>
-										<audio src={audio.url} controls className="h-6 w-full" />
-									</div>
+								<div key={idx} className="w-full max-w-md mb-3">
+									<div className="text-xs font-semibold text-gray-700 mb-1 ml-1">{audio.name || 'Voice Note'}</div>
+									<AudioPlayer src={audio.url} className="bg-gray-50 border-gray-200" />
 								</div>
 							))}
 
